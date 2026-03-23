@@ -28,21 +28,21 @@ repository:
 
 # Adiciona botões do GitHub ao seu livro
 html:
-  favicon: 'favicon.svg'
+  favicon: 'favicon.svg'            # favicon correto
   use_issues_button: true
   use_repository_button: true
-  use_edit_page_button: true  # Botão para editar a página
-  
+  use_edit_page_button: true
+  html_baseurl: 'https://robotica.unirobotica.com.br'  # domínio correto para publicação
+
 # Adiciona os notebooks à página de conteúdo
 content:
-  # Caminho para os notebooks
   notebooks:
-    - notebooks/*  # Ou o caminho correto para os seus notebooks  # Caminho para a pasta onde estão seus notebooks
+    - notebooks/*  # Caminho para a pasta onde estão seus notebooks
 
 # Ativa os botões para execução interativa (Thebe)
 launch_buttons:
-  thebe: true  # Ativa o Thebe para execução interativa
-  notebook_interface: "jupyterlab"  # Usa a interface JupyterLab
+  thebe: true
+  notebook_interface: "jupyterlab"
 
 thebe_config:
   always_load: true

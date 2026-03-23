@@ -1,0 +1,48 @@
+# Book settings
+# Learn more at https://jupyterbook.org/customize/config.html
+
+title: Python na Engenharia
+author: UniRobótica
+copyright: "2024"
+logo: UniRoboticaAzulSemFundo.png
+
+# Force re-execution of notebooks on each build.
+# See https://jupyterbook.org/content/execute.html
+execute:
+  execute_notebooks: 'off'  # Não executa os notebooks durante a construção
+
+# Define the name of the latex output file for PDF builds
+latex:
+  latex_documents:
+    targetname: book.tex
+
+# Add a bibtex file so that we can create citations
+bibtex_bibfiles:
+  - references.bib
+
+# Information about where the book exists on the web
+repository:
+  url: https://github.com/UniRobotica/python-na-engenharia
+  path_to_book: docs       
+  branch: main
+
+# Adiciona botões do GitHub ao seu livro
+html:
+  favicon: 'favicon.png'
+  use_issues_button: true
+  use_repository_button: true
+  use_edit_page_button: true  # Botão para editar a página
+
+# Adiciona os notebooks à página de conteúdo
+content:
+  # Caminho para os notebooks
+  notebooks:
+    - notebooks/*  # Ou o caminho correto para os seus notebooks  # Caminho para a pasta onde estão seus notebooks
+
+# Ativa os botões para execução interativa (Thebe)
+launch_buttons:
+  thebe: true  # Ativa o Thebe para execução interativa
+  notebook_interface: "jupyterlab"  # Usa a interface JupyterLab
+
+thebe_config:
+  always_load: true

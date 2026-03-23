@@ -1,0 +1,26 @@
+# Dependências básicas do Jupyter Book
+jupyter-book>=0.15.1
+sphinx>=4.0.0
+sphinxcontrib-bibtex>=2.5.0
+
+# Bibliotecas Python científicas
+numpy>=1.24.0
+pandas>=2.0.0
+matplotlib>=3.7.0
+scipy>=1.10.0
+
+# Suporte para notebooks interativos
+jupyterlab>=4.0.0
+notebook>=7.0.0
+ipywidgets>=8.0.0
+
+# Biblioteca para plotagem interativa
+plotly>=5.14.0
+
+# Suporte para equações e simbólicos
+sympy>=1.12.0
+
+# Dependências para formatação e execução de notebook
+# nbconvert>=7.3.0
+# nbformat>=5.8.0
+

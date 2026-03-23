@@ -1,0 +1,1 @@
+jb clean . && jb build . && xcopy _build\html docs /E /I /Y && start docs\index.html

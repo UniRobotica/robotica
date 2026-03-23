@@ -1,0 +1,985 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>C++ — Cap. 1: C++ Básico &#8212; Python na Engenharia</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/CppCap1';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Atividade: Modelagem e Simulação de um Processo Construtivo com Redes de Petri" href="Pratica3_ModRedesPetriLugarTransicao.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/UniRoboticaAzulSemFundo.png" class="logo__image only-light" alt="Python na Engenharia - Home"/>
+    <script>document.write(`<img src="../_static/UniRoboticaAzulSemFundo.png" class="logo__image only-dark" alt="Python na Engenharia - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Python na Engenharia
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Aula1_ConceitosBasicos.html">Introdução a programação</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula2_ControleFluxo.html">Controle de Fluxo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula3_ImportandoModulos.html">Importando Módulos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula4_Fun%C3%A7%C3%B5es.html">Funções</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula5_CriandoModulos.html">Criando módulos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula6_ExemploAplicacao.html">Exemplo de aplicação</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula7_ContEscopoExec.html">Contole de escopo de execução</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula8_Listas.html">Listas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula9_Listas2.html">Métodos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula10_Dicionarios.html">Dicionários</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula11_POO_Python.html">Programação orientada a objetos - Parte 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula12_POO_Python_pessoa.html">Programação orientada a objetos - Parte 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula13_POO_PythonSelf.html">Programação orientada a objetos - Parte 3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Aula14_POO_EngCivil.html">Programação Orientada a Objetos (POO) - exemplo em Engenharia Civil</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Pratica1_AtividadeFluxoDecisao.html">Atividade Prática – Programação com Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Pratica2_OrcamentoEquipes.html">Atividade Prática - Simulação de Orçamento de Fundação</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Pratica3_ModRedesPetriLugarTransicao.html">Atividade: Modelagem e Simulação de um Processo Construtivo com Redes de Petri</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">C++ — Cap. 1: C++ Básico</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li>
+<button onclick="initThebeSBT()"
+  class="btn btn-sm btn-launch-thebe dropdown-item"
+  title="Launch Thebe"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-play"></i>
+  </span>
+<span class="btn__text-container">Live Code</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/UniRobotica/python-na-engenharia" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/UniRobotica/python-na-engenharia/edit/main/docs/notebooks/CppCap1.ipynb" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/UniRobotica/python-na-engenharia/issues/new?title=Issue%20on%20page%20%2Fnotebooks/CppCap1.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/CppCap1.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>C++ — Cap. 1: C++ Básico</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resumo">Resumo</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compilar-e-executar-um-programa-c-simples">1.1 Compilar e executar um programa C++ simples</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compilar-executar-em-um-workspace-ros">1.2 Compilar/Executar em um workspace ROS</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exemplo-funcao-e-tipos-basicos">Exemplo: função e tipos básicos</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#listas-e-iteracao-std-list">1.3 Listas e iteração (std::list)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dicionarios-std-map">Dicionários (std::map)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#i-o-leitura-com-cin">I/O: leitura com <code class="docutils literal notranslate"><span class="pre">cin</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#operadores-aritmeticos-atribuicao-e-comparacao">Operadores aritméticos, atribuição e comparação</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comentarios">Comentários</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="c-cap-1-c-basico">
+<h1>C++ — Cap. 1: C++ Básico<a class="headerlink" href="#c-cap-1-c-basico" title="Link to this heading">#</a></h1>
+<p>Este notebook contém o conteúdo com blocos executáveis que salvam, compilam e executam código C++ usando <code class="docutils literal notranslate"><span class="pre">g++</span></code> via células <code class="docutils literal notranslate"><span class="pre">%%bash</span></code>. Funciona em um kernel Python padrão desde que <code class="docutils literal notranslate"><span class="pre">g++</span></code> esteja instalado no ambiente.</p>
+<section id="resumo">
+<h2>Resumo<a class="headerlink" href="#resumo" title="Link to this heading">#</a></h2>
+<p>Você aprenderá a criar variáveis em C++, tipos, operadores, I/O, comentários e como compilar/rodar programas. Também há exercícios que demonstram interação com uma classe hipotética <code class="docutils literal notranslate"><span class="pre">RosbotClass</span></code> (exemplos usados no curso para introdução do ROS - Robot Operating System).</p>
+<section id="compilar-e-executar-um-programa-c-simples">
+<h3>1.1 Compilar e executar um programa C++ simples<a class="headerlink" href="#compilar-e-executar-um-programa-c-simples" title="Link to this heading">#</a></h3>
+<p>A célula abaixo cria <code class="docutils literal notranslate"><span class="pre">hello.cpp</span></code>, compila com <code class="docutils literal notranslate"><span class="pre">g++</span></code> e executa o binário.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># cria, compila e executa C++ no Windows</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;hello.cpp&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span> <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">#include &lt;iostream&gt;</span>
+<span class="s2">int main() {</span>
+<span class="s2">    std::cout &lt;&lt; &quot;Hello Developer!&quot; &lt;&lt; std::endl;</span>
+<span class="s2">    return 0;</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+
+<span class="o">!</span>g++<span class="w"> </span>hello.cpp<span class="w"> </span>-o<span class="w"> </span>hello_exe
+<span class="o">!</span>hello_exe.exe
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Hello Developer!
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">bash</span>
+# Cria o arquivo hello.cpp usando redirecionamento de bloco.
+# Tudo entre EOF e EOF será escrito no arquivo.
+cat &lt;&lt;&#39;EOF&#39; &gt; hello.cpp
+#include &lt;iostream&gt;   // Biblioteca para entrada e saída (cout, cin, endl)
+
+int main() {
+    // Imprime a mensagem no terminal usando std::cout
+    std::cout &lt;&lt; &quot;Hello Developer!&quot; &lt;&lt; std::endl;
+
+    // Retorna 0 indicando que o programa executou com sucesso
+    return 0;
+}
+EOF
+
+# Compila o arquivo hello.cpp e gera um executável chamado hello_exe
+g++ hello.cpp -o hello_exe
+
+# Executa o programa compilado
+./hello_exe
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Hello Developer!
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="compilar-executar-em-um-workspace-ros">
+<h3>1.2 Compilar/Executar em um workspace ROS<a class="headerlink" href="#compilar-executar-em-um-workspace-ros" title="Link to this heading">#</a></h3>
+<p>No ROS (catkin) você normalmente coloca pacotes na pasta <code class="docutils literal notranslate"><span class="pre">~/catkin_ws/src/</span></code> e usa <code class="docutils literal notranslate"><span class="pre">catkin_make</span></code> para compilar todo o workspace. Aqui mostraremos exemplos independentes que podem ser testados localmente.</p>
+</section>
+<section id="exemplo-funcao-e-tipos-basicos">
+<h3>Exemplo: função e tipos básicos<a class="headerlink" href="#exemplo-funcao-e-tipos-basicos" title="Link to this heading">#</a></h3>
+<p>Criamos um arquivo que usa variáveis <code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">double</span></code> e <code class="docutils literal notranslate"><span class="pre">string</span></code> e imprime valores.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">bash</span>
+# Cria o arquivo types_example.cpp usando here-document (EOF)
+cat &lt;&lt;&#39;EOF&#39; &gt; types_example.cpp
+
+// Inclui a biblioteca padrão de entrada/saída
+#include &lt;iostream&gt;
+
+// Inclui a biblioteca de string
+#include &lt;string&gt;
+
+// Usa o namespace std para evitar escrever std:: o tempo todo
+using namespace std;
+
+// Função simples que soma dois inteiros
+int add(int a, int b) { 
+    return a + b; 
+}
+
+int main() {
+    // Declara variáveis de diferentes tipos numéricos
+    int a = 3;                         // Inteiro simples
+    float b = 0.23f;                   // Número de ponto flutuante (precisão simples)
+    double c = 0.225678391734;         // Número de ponto flutuante (alta precisão)
+    string s = &quot;developer&quot;;            // String comum
+
+    // Exibe os valores das variáveis
+    cout &lt;&lt; &quot;a = &quot; &lt;&lt; a &lt;&lt; &quot;\n&quot;;
+    cout &lt;&lt; &quot;b = &quot; &lt;&lt; b &lt;&lt; &quot;\n&quot;;
+    cout &lt;&lt; &quot;c = &quot; &lt;&lt; c &lt;&lt; &quot;\n&quot;;
+
+    // Acessa o primeiro caractere da string
+    cout &lt;&lt; &quot;s[0] = &quot; &lt;&lt; s[0] &lt;&lt; &quot;\n&quot;;
+
+    // Chama a função add(2,5) e mostra o resultado
+    cout &lt;&lt; &quot;sum(2,5) = &quot; &lt;&lt; add(2,5) &lt;&lt; endl;
+
+    // Retorno indicando sucesso
+    return 0;
+}
+EOF
+
+# Compila o arquivo C++ gerado, usando o padrão C++11
+g++ -std=c++11 types_example.cpp -o types_example
+
+# Executa o programa compilado
+./types_example
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>a = 3
+b = 0.23
+c = 0.225678
+s[0] = d
+sum(2,5) = 7
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="listas-e-iteracao-std-list">
+<h3>1.3 Listas e iteração (std::list)<a class="headerlink" href="#listas-e-iteracao-std-list" title="Link to this heading">#</a></h3>
+<p>Exemplo de uso de <code class="docutils literal notranslate"><span class="pre">std::list</span></code> e laço <code class="docutils literal notranslate"><span class="pre">for</span></code> em C++11.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">bash</span>
+# Cria o arquivo list_example.cpp usando um bloco here-document (EOF)
+cat &lt;&lt;&#39;EOF&#39; &gt; list_example.cpp
+
+// Inclui biblioteca de entrada/saída (cout, endl)
+#include &lt;iostream&gt;
+
+// Inclui a biblioteca de listas da STL (std::list)
+#include &lt;list&gt;
+
+// Usa o namespace std para simplificar a escrita
+using namespace std;
+
+int main(){
+
+    // Cria uma lista de inteiros inicializada com alguns valores
+    list&lt;int&gt; numbers = {1, 10, 100, 1000};
+
+    // Insere um valor no início da lista
+    numbers.push_front(0);
+
+    // Insere um valor no final da lista
+    numbers.push_back(3000);
+
+    // Loop &quot;for-each&quot;: percorre todos os elementos da lista
+    for (int val : numbers) {
+        // Imprime cada valor seguido de um espaço
+        cout &lt;&lt; val &lt;&lt; &quot; &quot;;
+    }
+
+    // Imprime uma quebra de linha ao final
+    cout &lt;&lt; endl;
+
+    // Retorna 0 indicando execução bem-sucedida
+    return 0;
+}
+
+EOF
+
+# Compila o código C++ usando o padrão C++11
+g++ -std=c++11 list_example.cpp -o list_example
+
+# Executa o binário gerado
+./list_example
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0 1 10 100 1000 3000 
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="dicionarios-std-map">
+<h3>Dicionários (std::map)<a class="headerlink" href="#dicionarios-std-map" title="Link to this heading">#</a></h3>
+<p>Exemplo com <code class="docutils literal notranslate"><span class="pre">std::map&lt;string,int&gt;</span></code> exibindo itens ordenados por chave.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">bash</span>
+# &#39;cat &lt;&lt; EOF &gt; arquivo&#39; cria um arquivo usando um bloco de texto.
+# Tudo entre EOF e EOF é gravado dentro do arquivo map_example.cpp.
+cat &lt;&lt;&#39;EOF&#39; &gt; map_example.cpp
+#include &lt;iostream&gt;   // Permite usar cout, cin e outras funções de entrada/saída
+#include &lt;map&gt;        // Fornece o container associativo std::map
+#include &lt;string&gt;     // Necessário para trabalhar com std::string
+
+using namespace std;  // Evita escrever std:: antes de cout, map, string etc.
+
+int main() {
+    // Declara um map que associa uma string (nome do personagem)
+    // a um int (quantidade de episódios)
+    map&lt;string,int&gt; episodes;
+
+    // Insere valores no map.
+    // A chave é o nome, o valor é a quantidade de episódios.
+    episodes[&quot;Dolores&quot;] = 30;      // Dolores aparece em 30 episódios
+    episodes[&quot;Maeve&quot;] = 27;        // Maeve aparece em 27 episódios
+    episodes[&quot;Theresa&quot;] = 6;       // Theresa aparece em 6 episódios
+    episodes[&quot;Clementine&quot;] = 11;   // Clementine aparece em 11 episódios
+
+    // Percorre todos os elementos do map utilizando um laço for-each
+    // &#39;auto item&#39; representa um par (pair&lt;string,int&gt;)
+    // item.first  → chave (nome)
+    // item.second → valor (episódios)
+    for (auto item : episodes) {
+        cout &lt;&lt; item.first           // imprime o nome do personagem
+             &lt;&lt; &quot; appears in &quot; 
+             &lt;&lt; item.second          // imprime o número de episódios
+             &lt;&lt; &quot; episodes\n&quot;;
+    }
+
+    return 0; // Retorna 0 indicando execução bem-sucedida
+}
+EOF
+
+# Compila o arquivo criado acima usando o padrão C++11
+g++ -std=c++11 map_example.cpp -o map_example
+
+# Executa o programa compilado
+./map_example
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Clementine appears in 11 episodes
+Dolores appears in 30 episodes
+Maeve appears in 27 episodes
+Theresa appears in 6 episodes
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="i-o-leitura-com-cin">
+<h3>I/O: leitura com <code class="docutils literal notranslate"><span class="pre">cin</span></code><a class="headerlink" href="#i-o-leitura-com-cin" title="Link to this heading">#</a></h3>
+<p>Nota: <code class="docutils literal notranslate"><span class="pre">cin</span></code> em células pode bloquear se não houver stdin. Aqui mostramos um exemplo que lê da entrada padrão via <code class="docutils literal notranslate"><span class="pre">printf</span></code> e <code class="docutils literal notranslate"><span class="pre">echo</span></code> para demonstrar comportamento.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">bash</span>
+cat &lt;&lt;&#39;EOF&#39; &gt; input_example.cpp
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+using namespace std;
+int main(){
+    string name;
+    // reads a single word from stdin
+    cin &gt;&gt; name;
+    cout &lt;&lt; &quot;Nice to meet you &quot; &lt;&lt; name &lt;&lt; &quot;!&quot; &lt;&lt; endl;
+    return 0;
+}
+EOF
+
+g++ -std=c++11 input_example.cpp -o input_example
+# Provide input via here-string to avoid interactive prompt
+echo &quot;Carlos&quot; | ./input_example
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="operadores-aritmeticos-atribuicao-e-comparacao">
+<h3>Operadores aritméticos, atribuição e comparação<a class="headerlink" href="#operadores-aritmeticos-atribuicao-e-comparacao" title="Link to this heading">#</a></h3>
+<p>Exemplo simples:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">bash</span>
+# Cria o arquivo ops_example.cpp usando um bloco &quot;here document&quot; (EOF)
+cat &lt;&lt;&#39;EOF&#39; &gt; ops_example.cpp
+
+// Biblioteca padrão de entrada e saída (cout, endl)
+#include &lt;iostream&gt;
+
+// Facilita o uso de cout, endl, etc.
+using namespace std;
+
+int main() {
+
+    // Declara duas variáveis para operações aritméticas
+    int a = 4, b = 3;
+
+    // Soma: 4 + 3 = 7
+    cout &lt;&lt; (a + b) &lt;&lt; endl;
+
+    // Subtração: 4 - 3 = 1
+    cout &lt;&lt; (a - b) &lt;&lt; endl;
+
+    // Multiplicação: 4 * 3 = 12
+    cout &lt;&lt; (a * b) &lt;&lt; endl;
+
+    // Divisão inteira: 4 / 3 = 1  (parte inteira apenas)
+    cout &lt;&lt; (a / b) &lt;&lt; endl;
+
+    // Módulo (resto da divisão): 4 % 3 = 1
+    cout &lt;&lt; (a % b) &lt;&lt; endl;
+
+    // Demonstração de operadores de atribuição abreviados
+    int x = 5;
+
+    // x += 2  →  x = x + 2  →  x passa a valer 7
+    cout &lt;&lt; (x += 2) &lt;&lt; endl;
+
+    // x *= 2  →  x = x * 2  →  x passa a valer 14
+    cout &lt;&lt; (x *= 2) &lt;&lt; endl;
+
+    // Comparações lógicas (true = 1, false = 0)
+    int y = 9, z = 8;
+
+    // y == z  →  9 == 8  → falso → 0
+    cout &lt;&lt; (y == z) &lt;&lt; endl;
+
+    // y &gt; z  →  9 &gt; 8  → verdadeiro → 1
+    cout &lt;&lt; (y &gt; z) &lt;&lt; endl;
+
+    // y &lt; z  →  9 &lt; 8  → falso → 0
+    cout &lt;&lt; (y &lt; z) &lt;&lt; endl;
+
+    // Fim do programa
+    return 0;
+}
+
+EOF
+
+# Compila usando C++11
+g++ -std=c++11 ops_example.cpp -o ops_example
+
+# Executa o binário
+./ops_example
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>7
+1
+12
+1
+1
+7
+14
+0
+1
+0
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="comentarios">
+<h3>Comentários<a class="headerlink" href="#comentarios" title="Link to this heading">#</a></h3>
+<p>Use <code class="docutils literal notranslate"><span class="pre">//</span></code> para comentários de linha e <code class="docutils literal notranslate"><span class="pre">/*</span> <span class="pre">...</span> <span class="pre">*/</span></code> para blocos. Exemplo:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">bash</span>
+cat &lt;&lt;&#39;EOF&#39; &gt; comments_example.cpp
+#include &lt;iostream&gt;
+using namespace std;
+
+int main(){
+    // This is a single-line comment
+    cout &lt;&lt; &quot;Line comment example&quot; &lt;&lt; endl;
+    /* This is a block comment
+       spanning multiple lines */
+    cout &lt;&lt; &quot;Block comment example&quot; &lt;&lt; endl;
+    return 0;
+}
+EOF
+
+g++ -std=c++11 comments_example.cpp -o comments_example
+./comments_example
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Line comment example
+Block comment example
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "UniRobotica/python-na-engenharia",
+            ref: "main",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Pratica3_ModRedesPetriLugarTransicao.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Atividade: Modelagem e Simulação de um Processo Construtivo com Redes de Petri</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resumo">Resumo</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compilar-e-executar-um-programa-c-simples">1.1 Compilar e executar um programa C++ simples</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compilar-executar-em-um-workspace-ros">1.2 Compilar/Executar em um workspace ROS</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exemplo-funcao-e-tipos-basicos">Exemplo: função e tipos básicos</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#listas-e-iteracao-std-list">1.3 Listas e iteração (std::list)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dicionarios-std-map">Dicionários (std::map)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#i-o-leitura-com-cin">I/O: leitura com <code class="docutils literal notranslate"><span class="pre">cin</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#operadores-aritmeticos-atribuicao-e-comparacao">Operadores aritméticos, atribuição e comparação</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comentarios">Comentários</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By UniRobótica
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

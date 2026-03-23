@@ -32,8 +32,7 @@ html:
   use_issues_button: true
   use_repository_button: true
   use_edit_page_button: true  # Botão para editar a página
-  baseurl: /robotica/
-
+  
 # Adiciona os notebooks à página de conteúdo
 content:
   # Caminho para os notebooks

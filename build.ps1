@@ -1,8 +1,16 @@
+# Limpa builds anteriores
 jb clean .
+
+# Gera o site
 jb build .
 
-if (Test-Path docs) { Remove-Item docs -Recurse -Force }
+# Remove docs antigo (evita arquivos quebrados)
+if (Test-Path docs) {
+    Remove-Item docs -Recurse -Force
+}
 
-xcopy _build\html docs /E /I /Y
+# Copia tudo corretamente (incluindo CSS/JS/assets)
+robocopy _build\html docs /MIR
 
-start docs\index.html
+# Abre no navegador para teste local
+Start-Process docs\index.html

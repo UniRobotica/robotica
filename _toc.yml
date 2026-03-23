@@ -5,22 +5,6 @@ format: jb-book
 root: intro
 
 chapters:
-- file: notebooks/Aula1_ConceitosBasicos.ipynb
-- file: notebooks/Aula2_ControleFluxo.ipynb
-- file: notebooks/Aula3_ImportandoModulos.ipynb
-- file: notebooks/Aula4_Funções.ipynb
-- file: notebooks/Aula5_CriandoModulos.ipynb
-- file: notebooks/Aula6_ExemploAplicacao.ipynb
-- file: notebooks/Aula7_ContEscopoExec.ipynb
-- file: notebooks/Aula8_Listas.ipynb
-- file: notebooks/Aula9_Listas2.ipynb
-- file: notebooks/Aula10_Dicionarios.ipynb
-- file: notebooks/Aula11_POO_Python.ipynb
-- file: notebooks/Aula12_POO_Python_pessoa.ipynb
-- file: notebooks/Aula13_POO_PythonSelf.ipynb
-- file: notebooks/Aula14_POO_EngCivil.ipynb
-- file: notebooks/Pratica1_AtividadeFluxoDecisao.ipynb
-- file: notebooks/Pratica2_OrcamentoEquipes.ipynb
-- file: notebooks/Pratica3_ModRedesPetriLugarTransicao.md
+
 - file: notebooks/CppCap1.ipynb
 #

@@ -48,4 +48,10 @@ launch_buttons:
 thebe_config:
   always_load: true
 
+sphinx:
+  extra_files:
+    - CNAME
+    - .nojekyll
+
+
   

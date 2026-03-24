@@ -2,4 +2,4 @@ format: jb-book
 root: intro
 
 chapters:
-- file: notebooks/Fundamentos
+- file: notebooks/Fundamentos.ipynb

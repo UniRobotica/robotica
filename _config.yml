@@ -3,8 +3,9 @@
 
 title: Robótica
 author: UniRobótica
-copyright: "2024"
+copyright: '2024'
 logo: UniRoboticaAzulSemFundo.png
+
 
 # Force re-execution of notebooks on each build.
 # See https://jupyterbook.org/content/execute.html
@@ -22,32 +23,29 @@ bibtex_bibfiles:
 
 # Information about where the book exists on the web
 repository:
-  url: https://github.com/UniRobotica/robotica
-  path_to_book: docs       
-  branch: main
+  url: https://github.com/UniRobotica/robotica  # Localização online do seu livro
+  path_to_book: docs  # Caminho para o livro, relativo à raiz do repositório
+  branch: main  # Ramo do repositório a ser usado
 
 # Adiciona botões do GitHub ao seu livro
 html:
-  favicon: 'favicon.svg'            # favicon correto
+  favicon: 'favicon.png'
   use_issues_button: true
   use_repository_button: true
-  use_edit_page_button: true
-  html_baseurl: 'https://robotica.unirobotica.com.br'  # domínio correto para publicação
+  use_edit_page_button: true  # Botão para editar a página
 
 # Adiciona os notebooks à página de conteúdo
 content:
+  # Caminho para os notebooks
   notebooks:
-    - notebooks/*  # Caminho para a pasta onde estão seus notebooks
+    - notebooks/*  # Ou o caminho correto para os seus notebooks  # Caminho para a pasta onde estão seus notebooks
 
 # Ativa os botões para execução interativa (Thebe)
 launch_buttons:
-  thebe: true
-  notebook_interface: "jupyterlab"
+  thebe: true  # Ativa o Thebe para execução interativa
+  notebook_interface: "jupyterlab"  # Usa a interface JupyterLab
 
 thebe_config:
   always_load: true
 
-sphinx:
-  extra_files:
-    - CNAME
-    - .nojekyll
+  

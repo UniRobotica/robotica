@@ -1,1 +1,1 @@
-cls; jupyter-book clean .; jupyter-book build .; robocopy _build\html docs /MIR; start .\_build\html\index.html
+cls; jupyter-book clean .; jupyter-book build .; robocopy _build\html docs /MIR; start .\docs\html\index.html

@@ -24,7 +24,7 @@ bibtex_bibfiles:
 # Information about where the book exists on the web
 repository:
   url: https://github.com/UniRobotica/robotica  # Localização online do seu livro
-  path_to_book: docs  # Caminho para o livro, relativo à raiz do repositório
+  path_to_book: .  # Caminho para o livro, relativo à raiz do repositório
   branch: main  # Ramo do repositório a ser usado
 
 # Adiciona botões do GitHub ao seu livro

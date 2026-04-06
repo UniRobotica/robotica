@@ -32,8 +32,10 @@ html:
   favicon: 'favicon.png'
   use_issues_button: true
   use_repository_button: true
-  use_edit_page_button: true  # Botão para editar a página
-
+  use_edit_page_button: true # Botão para editar a página
+  extra_javascript:
+    - _static/logo_link.js
+    
 # Adiciona os notebooks à página de conteúdo
 content:
   # Caminho para os notebooks

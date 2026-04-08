@@ -4,3 +4,4 @@ root: intro
 chapters:
 - file: notebooks/Fundamentos.ipynb
 - file: notebooks/OttoNinja.ipynb
+- file: notebooks/Fundamentos_rev2.ipynb

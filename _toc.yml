@@ -5,8 +5,8 @@ chapters:
 - file: notebooks/teoria/index.md
   title: Teoria
   sections:
-  - file: notebooks/Fundamentos.ipynb
-  - file: notebooks/OttoNinja.ipynb  
+  - file: notebooks/teoria/Fundamentos.ipynb
+  - file: notebooks/teoria/OttoNinja.ipynb  
 
 - file: notebooks/pratica/index.md
   title: Prática

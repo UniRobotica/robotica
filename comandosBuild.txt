@@ -1,5 +1,4 @@
 cls; `
 jupyter-book clean .; `
 jupyter-book build .; `
-start .\_build\html\index.html; `
-robocopy _build\html docs /MIR
+start .\_build\html\index.html

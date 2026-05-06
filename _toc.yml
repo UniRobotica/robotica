@@ -8,7 +8,7 @@ chapters:
   - file: notebooks/Fundamentos.ipynb
   - file: notebooks/OttoNinja.ipynb  
 
-- file: notebooks/praticas/index.md
+- file: notebooks/pratica/index.md
   title: Prática
   sections:
   - file: notebooks/pratica/2026_1/index.md

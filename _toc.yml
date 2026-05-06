@@ -12,6 +12,6 @@ chapters:
   title: Prática
   sections:
   - file: notebooks/pratica/2026_1/index.md
-    title: "2026.1"
+    title: "CPD066_semestre2026.1"
     sections:
-    - file: notebooks/pratica/2026_1/ProjetoFase1.md
+    - file: notebooks/pratica/2026_1/CPD066_ProjetoFase1.md

@@ -15,5 +15,4 @@ chapters:
   - file: notebooks/pratica/2026_1/index.md
     title: 2026.1
     sections:
-    - file: notebooks/pratica/2026_1/ProjetoFase1.ipynb
-      title: Projeto Fase 1
+    - file: notebooks/pratica/2026_1/ProjetoFase1.md

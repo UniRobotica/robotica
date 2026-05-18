@@ -53,6 +53,9 @@ thebe_config:
 sphinx:
   extra_files:
     - CNAME
+  config:
+    html_extra_path:
+      - assets
 
 
   

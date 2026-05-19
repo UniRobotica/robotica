@@ -53,7 +53,5 @@ sphinx:
   config:
     html_extra_path:
       - assets
-    # ADICIONADO: permite que células 'raw' com HTML renderizem os simuladores
-    nb_render_priority_html: 100
     nb_mime_priority_overrides:
-      - ['text/html', 100]
+      - ['html', 'text/html', 100]

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Otto + MATLAB + Simulink</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+
+<h1>Robô Otto + MATLAB + Simulink</h1>
+
+<div class="subtitle">
+Modelagem matemática, cinemática, dinâmica e controle aplicados ao robô bípedo Otto.
+</div>
+
+</header>
+
+<div class="tabs">
+
+<button class="tab-button active"
+onclick="showTab('intro',this)">
+Introdução
+</button>
+
+<button class="tab-button"
+onclick="showTab('cinematica',this)">
+Cinemática
+</button>
+
+<button class="tab-button"
+onclick="showTab('movimento',this)">
+Movimento
+</button>
+
+<button class="tab-button"
+onclick="showTab('dinamica',this)">
+Dinâmica
+</button>
+
+<button class="tab-button"
+onclick="showTab('pid',this)">
+PID
+</button>
+
+<button class="tab-button"
+onclick="showTab('matlab',this)">
+MATLAB
+</button>
+
+<button class="tab-button"
+onclick="showTab('stateflow',this)">
+Stateflow
+</button>
+
+</div>
+
+<div id="intro" class="section active">
+
+<h2>Introdução</h2>
+
+<p>
+Nesta aula o robô Otto será utilizado como uma plataforma para compreender conceitos matemáticos, físicos e computacionais presentes em sistemas robóticos reais.
+</p>
+
+<p>
+O objetivo não é apenas programar um robô, mas compreender como a matemática produz movimento físico.
+</p>
+
+<div class="analogy-card">
+
+<h3>Relação com Engenharia Civil</h3>
+
+<p>
+Assim como uma estrutura civil pode vibrar devido a ações dinâmicas, o robô também responde dinamicamente a forças, torques e sistemas de controle.
+</p>
+
+<p>
+A robótica será utilizada nesta disciplina como uma aplicação prática da matemática, aproximando conceitos abstratos da engenharia através de visualizações físicas e computacionais.
+</p>
+
+</div>
+
+<div class="concept-block">
+
+<ul>
+<li>MATLAB para modelagem matemática</li>
+<li>Simulink para sistemas de controle</li>
+<li>Control System Toolbox para análise dinâmica</li>
+<li>Robotics System Toolbox para modelagem robótica</li>
+<li>Stateflow para lógica de comportamento</li>
+</ul>
+
+</div>
+
+</div>
+
+<div id="cinematica" class="section">
+
+<h2>Cinemática do Otto</h2>
+
+<div class="math-box">
+
+x = L1 cos(θ1) + L2 cos(θ1 + θ2)
+
+<br><br>
+
+y = L1 sin(θ1) + L2 sin(θ1 + θ2)
+
+</div>
+
+<p>
+Essas equações determinam a posição do pé do robô no plano cartesiano.
+</p>
+
+<div class="analogy-card">
+
+<h3>Relação com Engenharia Civil</h3>
+
+<p>
+Na engenharia civil, raciocínio semelhante aparece em mecanismos estruturais articulados e análise geométrica de sistemas móveis.
+</p>
+
+<p>
+Da mesma forma que a posição de um nó estrutural pode ser calculada geometricamente, a posição do pé do Otto depende da combinação angular das articulações.
+</p>
+
+</div>
+
+<div class="grid-2">
+
+<div>
+
+<div class="control-group">
+<label>Ângulo θ1</label>
+<input type="range" id="th1" min="-90" max="90" value="30">
+</div>
+
+<div class="control-group">
+<label>Ângulo θ2</label>
+<input type="range" id="th2" min="-90" max="90" value="20">
+</div>
+
+<div class="result-box">
+
+<div id="theta1Text"></div>
+<div id="theta2Text"></div>
+
+<br>
+
+<div id="xText"></div>
+<div id="yText"></div>
+
+</div>
+
+</div>
+
+<div>
+
+<canvas id="legCanvas" width="500" height="500"></canvas>
+
+</div>
+
+</div>
+
+<div class="concept-block">
+
+<p>
+A visualização gráfica permite observar em tempo real como alterações angulares modificam a posição final do pé do robô.
+</p>
+
+</div>
+
+</div>
+
+<div id="movimento" class="section">
+
+<h2>Movimento Senoidal</h2>
+
+<div class="math-box">
+
+θ(t)=A sin(ωt+ϕ)
+
+</div>
+
+<p>
+Movimentos periódicos podem ser modelados matematicamente através de funções senoidais.
+</p>
+
+<div class="analogy-card">
+
+<h3>Relação com Engenharia Civil</h3>
+
+<p>
+Oscilações senoidais aparecem em vibrações estruturais, pontes e edifícios submetidos a ações dinâmicas.
+</p>
+
+<p>
+A mesma matemática utilizada para descrever vibrações estruturais pode ser utilizada para gerar a caminhada do Otto.
+</p>
+
+</div>
+
+<div class="grid-2">
+
+<div>
+
+<div class="control-group">
+<label>Amplitude</label>
+<input type="range" id="amp" min="10" max="80" value="30">
+</div>
+
+<div class="control-group">
+<label>Frequência</label>
+<input type="range" id="freq" min="1" max="10" value="3">
+</div>
+
+<div class="control-group">
+<label>Fase</label>
+<input type="range" id="phase" min="0" max="360" value="0">
+</div>
+
+</div>
+
+<div>
+
+<canvas id="waveCanvas" width="600" height="300"></canvas>
+
+</div>
+
+</div>
+
+</div>
+
+<div id="dinamica" class="section">
+
+<h2>Dinâmica Rotacional</h2>
+
+<div class="math-box">
+
+τ = I α
+
+</div>
+
+<p>
+A dinâmica relaciona torque, aceleração angular e momento de inércia.
+</p>
+
+<div class="analogy-card">
+
+<h3>Relação com Engenharia Civil</h3>
+
+<p>
+Estruturas com maior massa ou inércia exigem maiores esforços para alterar o movimento.
+</p>
+
+</div>
+
+<div class="math-box">
+
+τ = r × F
+
+</div>
+
+</div>
+
+<div id="pid" class="section">
+
+<h2>Controle PID</h2>
+
+<div class="math-box">
+
+u(t)=Kp e(t)+Ki∫e(t)dt+Kd de(t)/dt
+
+</div>
+
+<p>
+O controlador PID corrige continuamente o erro entre posição desejada e posição real.
+</p>
+
+<div class="simulink-flow">
+
+<div class="ctrl-box">Sine Wave</div>
+
+<div class="arrow">→</div>
+
+<div class="ctrl-box">PID</div>
+
+<div class="arrow">→</div>
+
+<div class="ctrl-box">Servo</div>
+
+<div class="arrow">→</div>
+
+<div class="ctrl-box">Scope</div>
+
+</div>
+
+<img src="imagens/pid_simulink.png"
+alt="Modelo PID no Simulink">
+
+</div>
+
+<div id="matlab" class="section">
+
+<h2>Integração com MATLAB</h2>
+
+<div class="code-box">
+
+% Modelo simplificado da perna do Otto
+
+L1 = 5;
+L2 = 5;
+
+theta1 = deg2rad(30);
+theta2 = deg2rad(20);
+
+x = L1*cos(theta1) + ...
+    L2*cos(theta1+theta2);
+
+y = L1*sin(theta1) + ...
+    L2*sin(theta1+theta2);
+
+plot(x,y,'ro')
+
+</div>
+
+<img src="imagens/matlab_plot.png"
+alt="Gráfico MATLAB">
+
+<img src="imagens/simulink_model.png"
+alt="Modelo Simulink">
+
+</div>
+
+<div id="stateflow" class="section">
+
+<h2>Stateflow</h2>
+
+<div class="simulink-flow">
+
+<div class="ctrl-box">Parado</div>
+
+<div class="arrow">→</div>
+
+<div class="ctrl-box">Andar</div>
+
+<div class="arrow">→</div>
+
+<div class="ctrl-box">Virar</div>
+
+<div class="arrow">→</div>
+
+<div class="ctrl-box">Parar</div>
+
+</div>
+
+<img src="imagens/stateflow.png"
+alt="Diagrama Stateflow">
+
+</div>
+
+</div>
+
+<script src="js/script.js"></script>
+
+</body>
+</html>

@@ -2,16 +2,35 @@ format: jb-book
 root: intro
 
 chapters:
+
 - file: notebooks/teoria/index.md
   title: Teoria
   sections:
   - file: notebooks/teoria/Fundamentos.ipynb
-  - file: notebooks/teoria/OttoNinja.ipynb  
+    title: Fundamentos de Robótica
+  - file: notebooks/teoria/OttoNinja.ipynb
+    title: Robô Otto Ninja
+  - file: notebooks/teoria/otto/OttoMatlab.ipynb
+    title: Otto, MATLAB e Simulink
+  # - file: notebooks/teoria/otto/cinematica
+  #   title: Cinemática do Otto
+  # - file: notebooks/teoria/otto/movimento
+  #   title: Movimento Senoidal
+  # - file: notebooks/teoria/otto/dinamica
+  #   title: Dinâmica Rotacional
+  # - file: notebooks/teoria/otto/pid
+  #   title: Controle PID
+  # - file: notebooks/teoria/otto/matlab
+  #   title: Integração MATLAB
+  # - file: notebooks/teoria/otto/stateflow
+  #   title: Stateflow
 
 - file: notebooks/pratica/index.md
-  title: Prática
+  title: Atividade Prática
+
   sections:
   - file: notebooks/pratica/2026_1/index.md
-    title: "CPD066_semestre2026.1"
+    title: CPD066 2026.1
     sections:
     - file: notebooks/pratica/2026_1/CPD066_ProjetoFase1.md
+      title: Projeto Fase 1

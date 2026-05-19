@@ -10,7 +10,7 @@ chapters:
     title: Fundamentos de Robótica
   - file: notebooks/teoria/OttoNinja.ipynb
     title: Robô Otto Ninja
-  - file: notebooks/teoria/OttoMatlab.ipynb
+  - file: notebooks/teoria/Aula1_OttoMATLAB.ipynb
     title: Otto, MATLAB e Simulink
   
 

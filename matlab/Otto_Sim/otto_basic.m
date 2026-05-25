@@ -2,368 +2,189 @@ clc;
 clear;
 close all;
 
-% =========================================================
-% MODELO CINEMÁTICO DO OTTO
-%
-% Hip servos:
-%   rotação no plano XY (eixo Z)
-%
-% Foot servos:
-%   rotação no plano XZ (eixo X)
-%
-% Tronco rígido
-% Pernas prismáticas
-% Pés com pivô no calcanhar
-% =========================================================
-
-%% ========================================================
-% FIGURA
-% =========================================================
+%% =========================================================
+% OTTO WALKING MODEL ESCALÁVEL
+% ==========================================================
 
 fig = figure( ...
-    'Name','Otto Kinematic Model', ...
+    'Name','Otto Walking Simulator', ...
     'Color',[1 1 1], ...
-    'Position',[100 100 1200 700]);
+    'Position',[50 50 1400 850]);
 
 ax = axes(fig);
-
 axis(ax,[-180 180 -180 180 0 220]);
 axis(ax,'equal');
-grid(ax,'on');
-view(ax,35,20);
+xlabel('X'); ylabel('Y'); zlabel('Z');
+view(ax,38,22);
+grid(ax,'on'); hold(ax,'on');
 
-xlabel('X');
-ylabel('Y');
-zlabel('Z');
+%% =========================================================
+% PARÂMETROS ESCALÁVEIS
+% ==========================================================
+params.scale = 1.0; % fator de escala global
 
-hold(ax,'on');
+params.bodyW = 70 * params.scale;
+params.bodyD = 50 * params.scale;
+params.bodyH = 60 * params.scale;
 
-%% ========================================================
-% PARÂMETROS INICIAIS
-% =========================================================
+params.legL = 60 * params.scale; % pernas mais longas
+params.legW = 15 * params.scale;
+params.legD = 20 * params.scale;
 
-params.bodyW = 70;
-params.bodyD = 50;
-params.bodyH = 60;
+params.footW = 32 * params.scale;
+params.footD = 60 * params.scale;
+params.footH = 10 * params.scale;
 
-params.legW  = 12;
-params.legD  = 18;
-params.legL  = 85;
-
-params.footW = 30;
-params.footD = 55;
-params.footH = 10;
-
-params.hipSpacing = 50;
-
-params.hipAmp  = 25;
-params.footAmp = 20;
-
+params.hipSpacing = 48 * params.scale;
+params.hipAmp = 20; params.footAmp = 15;
 params.speed = 1;
 
-%% ========================================================
-% SLIDERS
-% =========================================================
-
-uicontrol(fig,'Style','text', ...
-    'Position',[20 640 120 20], ...
-    'String','Hip amplitude');
-
-sHip = uicontrol(fig,'Style','slider', ...
-    'Min',0,'Max',45,'Value',25, ...
-    'Position',[20 620 200 20]);
-
-uicontrol(fig,'Style','text', ...
-    'Position',[20 590 120 20], ...
-    'String','Foot amplitude');
-
-sFoot = uicontrol(fig,'Style','slider', ...
-    'Min',0,'Max',45,'Value',20, ...
-    'Position',[20 570 200 20]);
-
-uicontrol(fig,'Style','text', ...
-    'Position',[20 540 120 20], ...
-    'String','Leg length');
-
-sLeg = uicontrol(fig,'Style','slider', ...
-    'Min',50,'Max',140,'Value',85, ...
-    'Position',[20 520 200 20]);
-
-%% ========================================================
-% BOTÕES
-% =========================================================
-
-mode = "forward";
-
-uicontrol(fig,'Style','pushbutton', ...
-    'String','Forward', ...
-    'Position',[20 450 90 30], ...
-    'Callback',@(src,event)setMode("forward"));
-
-uicontrol(fig,'Style','pushbutton', ...
-    'String','Backward', ...
-    'Position',[120 450 90 30], ...
-    'Callback',@(src,event)setMode("backward"));
-
-uicontrol(fig,'Style','pushbutton', ...
-    'String','Turn Left', ...
-    'Position',[20 410 90 30], ...
-    'Callback',@(src,event)setMode("left"));
-
-uicontrol(fig,'Style','pushbutton', ...
-    'String','Turn Right', ...
-    'Position',[120 410 90 30], ...
-    'Callback',@(src,event)setMode("right"));
-
-uicontrol(fig,'Style','pushbutton', ...
-    'String','Swing', ...
-    'Position',[70 370 90 30], ...
-    'Callback',@(src,event)setMode("swing"));
-
-%% ========================================================
+%% =========================================================
 % ESTADO GLOBAL
-% =========================================================
-
-robotPos = [0 0 120];
-robotYaw = 0;
-
+% ==========================================================
+robotPos = [0 0 100];
+robotYaw = 0; % virado para a tela
+trail = [];
+mode = "stop"; % inicia parado
 t = 0;
 
-%% ========================================================
+%% =========================================================
+% BOTÕES DE CONTROLE
+% ==========================================================
+uicontrol(fig,'Style','pushbutton','String','FORWARD', ...
+    'Position',[20 590 100 35], ...
+    'Callback',@(s,e)setMode("forward"));
+
+uicontrol(fig,'Style','pushbutton','String','BACKWARD', ...
+    'Position',[130 590 100 35], ...
+    'Callback',@(s,e)setMode("backward"));
+
+uicontrol(fig,'Style','pushbutton','String','TURN LEFT', ...
+    'Position',[20 545 100 35], ...
+    'Callback',@(s,e)setMode("left"));
+
+uicontrol(fig,'Style','pushbutton','String','TURN RIGHT', ...
+    'Position',[130 545 100 35], ...
+    'Callback',@(s,e)setMode("right"));
+
+uicontrol(fig,'Style','pushbutton','String','SWING', ...
+    'Position',[75 500 100 35], ...
+    'Callback',@(s,e)setMode("swing"));
+
+uicontrol(fig,'Style','pushbutton','String','STOP', ...
+    'Position',[75 455 100 35], ...
+    'Callback',@(s,e)setMode("stop"));
+
+%% =========================================================
 % LOOP
-% =========================================================
-
+% ==========================================================
 while ishandle(fig)
-
     cla(ax);
 
-    % =====================================================
-    % PARÂMETROS
-    % =====================================================
+    % Solo
+    surf(ax,[-200 200; -200 200],[-200 -200; 200 200],[0 0;0 0], ...
+        'FaceColor',[0.94 0.94 0.94],'EdgeColor',[0.82 0.82 0.82]);
 
-    params.hipAmp  = sHip.Value;
-    params.footAmp = sFoot.Value;
-    params.legL    = sLeg.Value;
+    % Fase da marcha
+    t = t + 0.05;
+    phase = sin(t);
 
-    % =====================================================
-    % FASE
-    % =====================================================
-
-    t = t + 0.04 * params.speed;
-
-    hipL  = params.hipAmp  * sin(t);
-    hipR  = -params.hipAmp * sin(t);
-
+    hipL = params.hipAmp * phase;
+    hipR = -params.hipAmp * phase;
     footL = params.footAmp * sin(t + pi/2);
     footR = -params.footAmp * sin(t + pi/2);
 
-    % =====================================================
-    % TURN
-    % =====================================================
+    stepGain = params.speed * 0.5;
 
     switch mode
-
         case "forward"
+    robotPos(1) = robotPos(1) - sin(robotYaw) * stepGain;
+    robotPos(2) = robotPos(2) - cos(robotYaw) * stepGain;
 
-            robotPos(2) = robotPos(2) + 0.6;
-
-        case "backward"
-
-            robotPos(2) = robotPos(2) - 0.6;
+case "backward"
+    robotPos(1) = robotPos(1) + sin(robotYaw) * stepGain;
+    robotPos(2) = robotPos(2) + cos(robotYaw) * stepGain;
 
         case "left"
-
-            robotYaw = robotYaw + deg2rad(0.8);
-            robotPos(2) = robotPos(2) + 0.4;
-
+            robotYaw = robotYaw + deg2rad(1.0);
         case "right"
-
-            robotYaw = robotYaw - deg2rad(0.8);
-            robotPos(2) = robotPos(2) + 0.4;
-
+            robotYaw = robotYaw - deg2rad(1.0);
         case "swing"
-
-            robotYaw = robotYaw + deg2rad(1.2);
-
+            robotYaw = robotYaw + deg2rad(2.0);
+        case "stop"
+            % não move
     end
 
-    % =====================================================
-    % MATRIZ BASE
-    % =====================================================
+    % Limites: se bater, para
+    LIM = 150;
+    if abs(robotPos(1)) > LIM || abs(robotPos(2)) > LIM
+        mode = "stop";
+    end
 
+    % Centro de massa com balanço lateral
+    bodyLift = 5 * abs(phase);
+    lateralShift = 8 * phase;
+    bodyCenter = robotPos + [lateralShift 0 bodyLift];
+
+    % Tronco
     Rz = rotz(robotYaw);
+    drawBox(bodyCenter,params.bodyW,params.bodyD,params.bodyH,Rz,[0.25 0.45 1]);
 
-    % =====================================================
-    % TRONCO
-    % =====================================================
+    % Quadris
+    hipLeft = bodyCenter + (Rz * [-params.hipSpacing/2 0 -params.bodyH/2]')';
+    hipRight = bodyCenter + (Rz * [params.hipSpacing/2 0 -params.bodyH/2]')';
 
-    bodyCenter = robotPos;
-
-    drawBox(bodyCenter, ...
-        params.bodyW, ...
-        params.bodyD, ...
-        params.bodyH, ...
-        Rz, ...
-        [0.2 0.4 1]);
-
-    % =====================================================
-    % QUADRIS
-    % =====================================================
-
-    hipLeft = bodyCenter + (Rz * ...
-        [-params.hipSpacing/2 0 -params.bodyH/2]')';
-
-    hipRight = bodyCenter + (Rz * ...
-        [ params.hipSpacing/2 0 -params.bodyH/2]')';
-
-    % =====================================================
-    % PERNA ESQUERDA
-    % =====================================================
-
+    % Pernas com rotação
     RL = Rz * rotz(deg2rad(hipL));
-
-    legLeftCenter = hipLeft + ...
-        (RL * [0 0 -params.legL/2]')';
-
-    drawBox( ...
-        legLeftCenter, ...
-        params.legW, ...
-        params.legD, ...
-        params.legL, ...
-        RL, ...
-        [0.1 0.7 0.3]);
-
-    % =====================================================
-    % PERNA DIREITA
-    % =====================================================
-
     RR = Rz * rotz(deg2rad(hipR));
+    legLeftCenter = hipLeft + (RL * [0 0 -params.legL/2]')';
+    legRightCenter = hipRight + (RR * [0 0 -params.legL/2]')';
+    drawBox(legLeftCenter,params.legW,params.legD,params.legL,RL,[0.1 0.7 0.3]);
+    drawBox(legRightCenter,params.legW,params.legD,params.legL,RR,[0.2 0.5 1]);
 
-    legRightCenter = hipRight + ...
-        (RR * [0 0 -params.legL/2]')';
+    % Pés alinhados para frente
+    ankleLeft = hipLeft + (RL * [0 0 -params.legL]')';
+ankleRight = hipRight + (RR * [0 0 -params.legL]')';
 
-    drawBox( ...
-        legRightCenter, ...
-        params.legW, ...
-        params.legD, ...
-        params.legL, ...
-        RR, ...
-        [0.2 0.5 1]);
+RFLeft = RL * rotx(deg2rad(footL));
+RFRight = RR * rotx(deg2rad(footR));
 
-    % =====================================================
-    % TORNOZELOS
-    % =====================================================
+% Corrigido: pés para frente
+footLeftCenter = ankleLeft + [0 -params.footD/2 0];
+footRightCenter = ankleRight + [0 -params.footD/2 0];
 
-    ankleLeft = hipLeft + ...
-        (RL * [0 0 -params.legL]')';
+drawBox(footLeftCenter,params.footW,params.footD,params.footH,RFLeft,[1 0.6 0.1]);
+drawBox(footRightCenter,params.footW,params.footD,params.footH,RFRight,[1 0.35 0.15]);
 
-    ankleRight = hipRight + ...
-        (RR * [0 0 -params.legL]')';
+    % Trajetória
+    trail = [trail; bodyCenter];
+    if size(trail,1) > 500, trail(1,:) = []; end
+    plot3(trail(:,1),trail(:,2),trail(:,3),'r-','LineWidth',1.5);
 
-    % =====================================================
-    % PÉS
-    %
-    % ROTACIONAM NO PLANO XZ
-    % PIVÔ NO CALCANHAR
-    % =====================================================
-
-    RFLeft = RL * rotx(deg2rad(footL));
-    RFRight = RR * rotx(deg2rad(footR));
-
-    footOffset = RFLeft * [0 params.footD/2 0]';
-
-    footLeftCenter = ankleLeft + footOffset';
-
-    footOffsetR = RFRight * [0 params.footD/2 0]';
-
-    footRightCenter = ankleRight + footOffsetR';
-
-    drawBox( ...
-        footLeftCenter, ...
-        params.footW, ...
-        params.footD, ...
-        params.footH, ...
-        RFLeft, ...
-        [1 0.5 0.1]);
-
-    drawBox( ...
-        footRightCenter, ...
-        params.footW, ...
-        params.footD, ...
-        params.footH, ...
-        RFRight, ...
-        [1 0.3 0.2]);
-
-    % =====================================================
-    % SOLO
-    % =====================================================
-
-    surf(ax, ...
-        [-300 300; -300 300], ...
-        [-300 -300; 300 300], ...
-        [0 0; 0 0], ...
-        'FaceColor',[0.95 0.95 0.95], ...
-        'EdgeColor',[0.85 0.85 0.85]);
-
+    % Texto
+    title(sprintf('Hip %.1f° | Foot %.1f° | Mode: %s',hipL,footL,mode));
     drawnow;
-
 end
 
-%% ========================================================
-% FUNÇÕES
-% =========================================================
-
+%% =========================================================
+% FUNÇÕES AUXILIARES
+% ==========================================================
 function setMode(m)
-    assignin('base','mode',m);
+assignin('base','mode',m);
 end
 
 function R = rotx(a)
-
-R = [ ...
-    1 0 0
-    0 cos(a) -sin(a)
-    0 sin(a) cos(a)];
-
+R = [1 0 0; 0 cos(a) -sin(a); 0 sin(a) cos(a)];
 end
 
 function R = rotz(a)
-
-R = [ ...
-    cos(a) -sin(a) 0
-    sin(a)  cos(a) 0
-    0 0 1];
-
+R = [cos(a) -sin(a) 0; sin(a) cos(a) 0; 0 0 1];
 end
 
 function drawBox(center,w,d,h,R,color)
-
-v = [ ...
-    -w/2 -d/2 -h/2
-     w/2 -d/2 -h/2
-     w/2  d/2 -h/2
-    -w/2  d/2 -h/2
-    -w/2 -d/2  h/2
-     w/2 -d/2  h/2
-     w/2  d/2  h/2
-    -w/2  d/2  h/2];
-
-v = (R * v')';
-
-v = v + center;
-
-f = [ ...
-    1 2 3 4
-    5 6 7 8
-    1 2 6 5
-    2 3 7 6
-    3 4 8 7
-    4 1 5 8];
-
-patch( ...
-    'Vertices',v, ...
-    'Faces',f, ...
-    'FaceColor',color, ...
-    'EdgeColor',[0.2 0.2 0.2], ...
-    'FaceAlpha',0.95);
-
+v = [-w/2 -d/2 -h/2; w/2 -d/2 -h/2; w/2 d/2 -h/2; -w/2 d/2 -h/2; ...
+     -w/2 -d/2 h/2; w/2 -d/2 h/2; w/2 d/2 h/2; -w/2 d/2 h/2];
+v = (R * v')'; v = v + center;
+f = [1 2 3 4; 5 6 7 8; 1 2 6 5; 2 3 7 6; 3 4 8 7; 4 1 5 8];
+patch('Vertices',v,'Faces',f,'FaceColor',color,'EdgeColor',[0.2 0.2 0.2],'FaceAlpha',0.96);
 end

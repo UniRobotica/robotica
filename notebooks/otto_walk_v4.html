@@ -1,0 +1,559 @@
+
+<h2 class="sr-only">Simulador cinemático do Otto: vista superior XY, vista frontal XZ e trajetória global percorrida.</h2>
+
+<style>
+.ow{font-family:var(--font-mono,monospace);padding:0.5rem 0;}
+.ow-3col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px;}
+.ow-panel{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:7px;}
+.ow-lbl{font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:4px;}
+.ow-ctrl{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:11px;margin-bottom:8px;}
+.ow-sec{font-size:9px;letter-spacing:0.07em;text-transform:uppercase;color:var(--color-text-tertiary);margin:9px 0 5px;border-top:0.5px solid var(--color-border-tertiary);padding-top:7px;}
+.ow-2c{display:grid;grid-template-columns:1fr 1fr;gap:0 14px;}
+.ow-row{display:flex;align-items:center;gap:6px;margin-bottom:5px;}
+.ow-row label{font-size:11px;color:var(--color-text-secondary);min-width:100px;}
+.ow-row input[type=range]{flex:1;}
+.ow-row span{font-size:11px;font-family:monospace;min-width:38px;text-align:right;}
+.ow-btns{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px;align-items:center;}
+.ow-btn{padding:4px 10px;font-size:11px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);color:var(--color-text-primary);cursor:pointer;font-family:inherit;}
+.ow-btn.on{background:#185FA5;color:#E6F1FB;border-color:#185FA5;}
+.ow-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:8px;}
+.ow-st{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:5px 7px;text-align:center;}
+.ow-stl{font-size:9px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:0.05em;}
+.ow-stv{font-size:12px;font-weight:500;margin-top:1px;}
+</style>
+
+<div class="ow">
+  <div class="ow-3col">
+    <div class="ow-panel">
+      <div class="ow-lbl">Vista superior — plano XY</div>
+      <canvas id="cvT" width="196" height="220" style="display:block;width:100%;border-radius:3px;"></canvas>
+    </div>
+    <div class="ow-panel">
+      <div class="ow-lbl">Vista frontal — plano XZ</div>
+      <canvas id="cvF" width="196" height="220" style="display:block;width:100%;border-radius:3px;"></canvas>
+    </div>
+    <div class="ow-panel">
+      <div class="ow-lbl">Trajetória global — chão XY</div>
+      <canvas id="cvG" width="196" height="220" style="display:block;width:100%;border-radius:3px;"></canvas>
+    </div>
+  </div>
+
+  <div class="ow-ctrl">
+    <div class="ow-lbl">Geometria</div>
+    <div class="ow-2c">
+      <div>
+        <div class="ow-row"><label>Comp. perna (mm)</label><input type="range" id="gLeg" min="40" max="130" value="90" step="5"><span id="vgLeg">90</span></div>
+        <div class="ow-row"><label>Larg. pé (mm)</label><input type="range" id="gFW" min="20" max="80" value="55" step="5"><span id="vgFW">55</span></div>
+      </div>
+      <div>
+        <div class="ow-row"><label>Comp. pé (mm)</label><input type="range" id="gFL" min="20" max="70" value="35" step="5"><span id="vgFL">35</span></div>
+        <div class="ow-row"><label>Sep. quadril (mm)</label><input type="range" id="gHS" min="15" max="60" value="30" step="5"><span id="vgHS">30</span></div>
+      </div>
+    </div>
+
+    <div class="ow-sec">Servos — A = amplitude, O = offset (graus)</div>
+    <div class="ow-2c">
+      <div>
+        <div class="ow-row"><label style="color:#1D9E75;">LeftLeg A</label><input type="range" id="aLL" min="0" max="90" value="30" step="1"><span id="vaLL" style="color:#1D9E75;">30°</span></div>
+        <div class="ow-row"><label style="color:#1D9E75;">LeftLeg O</label><input type="range" id="oLL" min="-30" max="30" value="0" step="1"><span id="voLL" style="color:#1D9E75;">0°</span></div>
+        <div class="ow-row"><label style="color:#EF9F27;">LeftFoot A</label><input type="range" id="aLF" min="0" max="90" value="20" step="1"><span id="vaLF" style="color:#EF9F27;">20°</span></div>
+        <div class="ow-row"><label style="color:#EF9F27;">LeftFoot O</label><input type="range" id="oLF" min="-90" max="90" value="4" step="1"><span id="voLF" style="color:#EF9F27;">4°</span></div>
+      </div>
+      <div>
+        <div class="ow-row"><label style="color:#378ADD;">RightLeg A</label><input type="range" id="aRL" min="0" max="90" value="30" step="1"><span id="vaRL" style="color:#378ADD;">30°</span></div>
+        <div class="ow-row"><label style="color:#378ADD;">RightLeg O</label><input type="range" id="oRL" min="-30" max="30" value="0" step="1"><span id="voRL" style="color:#378ADD;">0°</span></div>
+        <div class="ow-row"><label style="color:#D85A30;">RightFoot A</label><input type="range" id="aRF" min="0" max="90" value="20" step="1"><span id="vaRF" style="color:#D85A30;">20°</span></div>
+        <div class="ow-row"><label style="color:#D85A30;">RightFoot O</label><input type="range" id="oRF" min="-90" max="90" value="-4" step="1"><span id="voRF" style="color:#D85A30;">-4°</span></div>
+      </div>
+    </div>
+
+    <div class="ow-sec">Animação</div>
+    <div class="ow-row">
+      <label>Período T (ms)</label>
+      <input type="range" id="sPer" min="400" max="3000" value="1000" step="50">
+      <span id="vsPer">1000 ms</span>
+    </div>
+    <div class="ow-btns">
+      <span style="font-size:10px;color:var(--color-text-tertiary);">Preset:</span>
+      <button class="ow-btn on" id="pWF" onclick="preset('wF')">Walk ↑</button>
+      <button class="ow-btn" id="pWB" onclick="preset('wB')">Walk ↓</button>
+      <button class="ow-btn" id="pTL" onclick="preset('tL')" title="Perna esq amplitude menor → gira à esquerda">Turn ←</button>
+      <button class="ow-btn" id="pTR" onclick="preset('tR')" title="Perna dir amplitude menor → gira à direita">Turn →</button>
+      <button class="ow-btn" id="pSW" onclick="preset('sw')">Swing</button>
+      <div style="margin-left:auto;display:flex;gap:5px;">
+        <button class="ow-btn" id="btnP" onclick="togglePlay()">▶ Animar</button>
+        <button class="ow-btn" onclick="resetSim()">↺</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ow-stats">
+    <div class="ow-st"><div class="ow-stl">LeftLeg θ</div><div class="ow-stv" id="dLL" style="color:#1D9E75;">0.0°</div></div>
+    <div class="ow-st"><div class="ow-stl">RightLeg θ</div><div class="ow-stv" id="dRL" style="color:#378ADD;">0.0°</div></div>
+    <div class="ow-st"><div class="ow-stl">LeftFoot θ</div><div class="ow-stv" id="dLF" style="color:#EF9F27;">0.0°</div></div>
+    <div class="ow-st"><div class="ow-stl">RightFoot θ</div><div class="ow-stv" id="dRF" style="color:#D85A30;">0.0°</div></div>
+  </div>
+</div>
+
+<script>
+(function(){
+
+// ── Presets (Otto.cpp) ────────────────────────────────────────────────────────
+var PRESET={
+  wF:{A:[30,30,20,20],O:[0,0, 4,-4],ph:[0,0,-90,-90]},
+  wB:{A:[30,30,20,20],O:[0,0, 4,-4],ph:[0,0, 90, 90]},
+  // Turn: amplitude assimétrica entre pernas → arcos de raio diferente → rotação
+  // Turn ←: perna esq amplitude menor → passo esq menor → gira à esquerda
+  tL:{A:[10,30,20,20],O:[0,0, 4,-4],ph:[0,0,-90,-90]},
+  // Turn →: perna dir amplitude menor → passo dir menor → gira à direita
+  tR:{A:[30,10,20,20],O:[0,0, 4,-4],ph:[0,0,-90,-90]},
+  sw:{A:[ 0, 0,20,20],O:[0,0,20,-20],ph:[0,0,0,0]},
+};
+
+var S={A:[30,30,20,20],O:[0,0,4,-4],ph:[0,0,-90,-90]};
+var G={leg:90,fw:55,fl:35,hs:30};
+var T=1000,simT=0,playing=false,lastTS=null;
+
+// Posição global do robô no chão (odometria simplificada)
+var globalX=0,globalY=0,globalHeading=0; // heading em radianos
+var prevSupL=null, prevPhase=0;
+var globalTrail=[{x:0,y:0}];
+var MAXGTR=300;
+
+// Canvas
+var cvT=document.getElementById('cvT'),ctT=cvT.getContext('2d');
+var cvF=document.getElementById('cvF'),ctF=cvF.getContext('2d');
+var cvG=document.getElementById('cvG'),ctG=cvG.getContext('2d');
+var CW=196,CH=220;
+
+function dk(){return window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches;}
+function gc(a){return dk()?'rgba(255,255,255,'+a+')':'rgba(0,0,0,'+a+')';}
+
+// ── Sliders ───────────────────────────────────────────────────────────────────
+function read(){
+  S.A=[+document.getElementById('aLL').value,+document.getElementById('aRL').value,
+       +document.getElementById('aLF').value,+document.getElementById('aRF').value];
+  S.O=[+document.getElementById('oLL').value,+document.getElementById('oRL').value,
+       +document.getElementById('oLF').value,+document.getElementById('oRF').value];
+  G.leg=+document.getElementById('gLeg').value;
+  G.fw =+document.getElementById('gFW').value;
+  G.fl =+document.getElementById('gFL').value;
+  G.hs =+document.getElementById('gHS').value;
+  T    =+document.getElementById('sPer').value;
+}
+
+[['aLL','vaLL','°'],['aRL','vaRL','°'],['aLF','vaLF','°'],['aRF','vaRF','°'],
+ ['oLL','voLL','°'],['oRL','voRL','°'],['oLF','voLF','°'],['oRF','voRF','°']
+].forEach(function(r){
+  document.getElementById(r[0]).addEventListener('input',function(){
+    document.getElementById(r[1]).textContent=this.value+r[2];
+  });
+});
+['gLeg','gFW','gFL','gHS'].forEach(function(id){
+  document.getElementById(id).addEventListener('input',function(){
+    document.getElementById('v'+id).textContent=this.value;
+  });
+});
+document.getElementById('sPer').addEventListener('input',function(){
+  document.getElementById('vsPer').textContent=this.value+' ms';
+});
+
+// ── Ângulos dos 4 servos ──────────────────────────────────────────────────────
+function ang(tms){
+  var wt=2*Math.PI*tms/T;
+  return S.A.map(function(a,i){return S.O[i]+a*Math.sin(wt+S.ph[i]*Math.PI/180);});
+}
+
+// ── Odometria simplificada ────────────────────────────────────────────────────
+// A cada meio ciclo (troca de perna de apoio), o corpo avança.
+// Distância de passo ≈ 2·L·sin(A_leg·π/180) projetada na direção de heading.
+// Turn: diferença de amplitude → rotação proporcional.
+function updateOdometry(a, dt){
+  if(!playing)return;
+  var thLL=a[0]*Math.PI/180, thRL=a[1]*Math.PI/180;
+  var thLF=a[2]*Math.PI/180, thRF=a[3]*Math.PI/180;
+
+  // Perna de apoio = menor |θ_foot| (pé mais plano)
+  var supL=Math.abs(thLF)<=Math.abs(thRF);
+
+  // Velocidade linear do CoM: proporcional ao deslocamento lateral médio das pernas
+  // Quando as pernas oscilam (A_leg>0), o pé de apoio empurra o chão → corpo avança
+  // Componente de avanço: v ∝ (A_LL+A_RL)/2 · ω · cos(fase atual)
+  var wt=2*Math.PI*simT/T;
+  var vLin=(S.A[0]+S.A[1])/2*0.0008*(dt/T)*G.leg; // mm/frame normalizado
+
+  // Rotação: diferença de amplitude entre pernas determina curvatura
+  // A_LL > A_RL → perna esq dá passo maior → curva à direita (e vice-versa)
+  var dA=S.A[0]-S.A[1]; // positivo → curva à direita
+  var dHeading=dA*0.00015*(dt/T)*Math.PI;
+  globalHeading+=dHeading;
+
+  // Direção de avanço: heading atual + π/2 (frente do robô = eixo Y)
+  // Preset walk forward: fases dos pés em -90° → sin avança quando pernas estão no meio
+  // Direção: para frente (heading) quando walk, inverso quando walkB
+  var fwSign=(S.ph[2]<0)?1:-1; // fase negativa = forward
+  globalX+=fwSign*vLin*Math.sin(globalHeading+Math.PI);
+  globalY+=fwSign*vLin*Math.cos(globalHeading+Math.PI);
+
+  globalTrail.push({x:globalX,y:globalY,h:globalHeading});
+  if(globalTrail.length>MAXGTR)globalTrail.shift();
+}
+
+// ── Helpers canvas ────────────────────────────────────────────────────────────
+function grid(ctx){
+  ctx.strokeStyle=gc(0.05);ctx.lineWidth=0.5;
+  for(var x=0;x<CW;x+=20){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,CH);ctx.stroke();}
+  for(var y=0;y<CH;y+=20){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(CW,y);ctx.stroke();}
+}
+function dot(ctx,x,y,r,col){ctx.beginPath();ctx.arc(x,y,r,0,2*Math.PI);ctx.fillStyle=col;ctx.fill();}
+
+// ── Vista Superior ─────────────────────────────────────────────────────────────
+// Mostra APENAS: corpo (retângulo) e pés (retângulos menores) girando em arco.
+// A perna está em Z (vertical) → não aparece na projeção XY.
+// Os pés ficam parcialmente sob o corpo (realidade: pé embaixo do tronco).
+function drawTop(a){
+  ctT.clearRect(0,0,CW,CH);
+  grid(ctT);
+
+  var cx=CW/2, cy=CH/2+10;
+  var sc=Math.min(1.1,95/Math.max(G.leg,1));
+  var L=G.leg*sc, FW=G.fw*sc*0.9, FL=G.fl*sc*0.9, HS=G.hs*sc;
+
+  // Eixos
+  ctT.strokeStyle=gc(0.15);ctT.lineWidth=1;
+  ctT.beginPath();ctT.moveTo(8,cy);ctT.lineTo(CW-8,cy);ctT.stroke();
+  ctT.beginPath();ctT.moveTo(cx,CH-8);ctT.lineTo(cx,8);ctT.stroke();
+  ctT.font='8px monospace';ctT.fillStyle=gc(0.35);
+  ctT.fillText('+X',CW-18,cy-3);
+  ctT.fillText('+Y',cx+3,11);
+
+  // articulações do quadril (pontos de pivô dos pés)
+  var hipLx=cx-HS, hipRx=cx+HS, hipY=cy;
+
+  // ── Pé esquerdo ──
+  // Gira em torno do quadril esquerdo no plano XY (como porta em torno de eixo Z)
+  // θ_LL=0 → pé aponta para +Y (frente). θ>0 → roda para +X.
+  var thLL=a[0]*Math.PI/180;
+  // Centro do pé fica a distância L do quadril na direção θ_LL
+  var fLcx=hipLx+L*Math.sin(thLL);
+  var fLcy=hipY -L*Math.cos(thLL);
+
+  ctT.save();
+  ctT.translate(fLcx,fLcy);
+  ctT.rotate(thLL); // pé alinha com a direção da perna
+  ctT.fillStyle=dk()?'rgba(29,158,117,0.9)':'rgba(15,110,86,0.82)';
+  ctT.strokeStyle=dk()?'#5DCAA5':'#0F6E56';
+  ctT.lineWidth=1;
+  ctT.beginPath();
+  if(ctT.roundRect)ctT.roundRect(-FW/2,-FL/2,FW,FL,3);
+  else ctT.rect(-FW/2,-FL/2,FW,FL);
+  ctT.fill();ctT.stroke();
+  ctT.restore();
+
+  // arco θ_LL
+  ctT.strokeStyle='#1D9E75';ctT.lineWidth=1.2;
+  ctT.beginPath();ctT.arc(hipLx,hipY,20,-Math.PI/2,-Math.PI/2+thLL,thLL<0);ctT.stroke();
+  ctT.font='8px monospace';ctT.fillStyle='#1D9E75';
+  ctT.fillText(a[0].toFixed(0)+'°',hipLx-24,hipY+26);
+
+  // ── Pé direito ──
+  var thRL=a[1]*Math.PI/180;
+  var fRcx=hipRx+L*Math.sin(thRL);
+  var fRcy=hipY -L*Math.cos(thRL);
+
+  ctT.save();
+  ctT.translate(fRcx,fRcy);
+  ctT.rotate(thRL);
+  ctT.fillStyle=dk()?'rgba(55,138,221,0.9)':'rgba(24,95,165,0.82)';
+  ctT.strokeStyle=dk()?'#85B7EB':'#185FA5';
+  ctT.lineWidth=1;
+  ctT.beginPath();
+  if(ctT.roundRect)ctT.roundRect(-FW/2,-FL/2,FW,FL,3);
+  else ctT.rect(-FW/2,-FL/2,FW,FL);
+  ctT.fill();ctT.stroke();
+  ctT.restore();
+
+  ctT.strokeStyle='#378ADD';ctT.lineWidth=1.2;
+  ctT.beginPath();ctT.arc(hipRx,hipY,20,-Math.PI/2,-Math.PI/2+thRL,thRL<0);ctT.stroke();
+  ctT.font='8px monospace';ctT.fillStyle='#378ADD';
+  ctT.fillText(a[1].toFixed(0)+'°',hipRx+4,hipY+26);
+
+  // ── Corpo (desenhado por cima dos pés) ──
+  var bw=2*HS+FW*0.4, bd=FL*0.9;
+  ctT.fillStyle=dk()?'rgba(24,95,165,0.92)':'rgba(37,99,235,0.88)';
+  ctT.strokeStyle=dk()?'#85B7EB':'#185FA5';
+  ctT.lineWidth=1;
+  ctT.beginPath();
+  if(ctT.roundRect)ctT.roundRect(cx-bw/2,cy-bd/2,bw,bd,5);
+  else ctT.rect(cx-bw/2,cy-bd/2,bw,bd);
+  ctT.fill();ctT.stroke();
+
+  // olhos (frente = +Y = topo do canvas)
+  [-9,9].forEach(function(dx){dot(ctT,cx+dx,cy-bd/2-3,3,'rgba(255,255,255,0.9)');});
+  ctT.font='8px monospace';ctT.fillStyle=gc(0.35);
+  ctT.fillText('frente',cx-13,cy-bd/2-8);
+
+  // pivôs do quadril (sobre o corpo)
+  dot(ctT,hipLx,hipY,4,'#1D9E75');
+  dot(ctT,hipRx,hipY,4,'#378ADD');
+}
+
+// ── Vista Frontal ──────────────────────────────────────────────────────────────
+// Plano XZ. Pernas aparecem como segmentos verticais.
+// Pés inclinados por θ_foot (rotação em Y → vira no plano frontal).
+function drawFront(a){
+  ctF.clearRect(0,0,CW,CH);
+  grid(ctF);
+
+  var gY=CH-25;
+  var sc=Math.min(1.1,95/Math.max(G.leg,1));
+  var L=G.leg*sc, FW=G.fw*sc*0.9, FH=7, HS=G.hs*sc;
+  var cx=CW/2;
+  var hipLx=cx-HS, hipRx=cx+HS;
+
+  // Eixos
+  ctF.strokeStyle=gc(0.15);ctF.lineWidth=1;
+  ctF.beginPath();ctF.moveTo(8,gY-L*0.5);ctF.lineTo(CW-8,gY-L*0.5);ctF.stroke();
+  ctF.beginPath();ctF.moveTo(cx,gY+5);ctF.lineTo(cx,8);ctF.stroke();
+  ctF.font='8px monospace';ctF.fillStyle=gc(0.35);
+  ctF.fillText('+X',CW-18,gY-L*0.5-3);
+  ctF.fillText('+Z',cx+3,11);
+
+  // piso
+  ctF.strokeStyle=gc(0.25);ctF.lineWidth=2;
+  ctF.beginPath();ctF.moveTo(8,gY);ctF.lineTo(CW-8,gY);ctF.stroke();
+
+  var thLF=a[2]*Math.PI/180;
+  var thRF=a[3]*Math.PI/180;
+
+  // deslocamento vertical do tornozelo causado pela inclinação do pé
+  // quando o pé inclina ±θ sobre o pivô central, o tornozelo sobe (FW/2)·|sin(θ)|
+  var dZL=(FW/2)*Math.abs(Math.sin(thLF));
+  var dZR=(FW/2)*Math.abs(Math.sin(thRF));
+
+  var ankLY=gY-dZL*0.4;
+  var ankRY=gY-dZR*0.4;
+  var hipLY=ankLY-L;
+  var hipRY=ankRY-L;
+
+  // variação lateral do corpo causada pela diferença de alturas
+  var bodyH=Math.min(48,L*0.55);
+  var bodyW=2*HS+FW*0.35;
+  var bodyCY=(hipLY+hipRY)/2;
+  var bodyCX=cx+(thLF-thRF)*HS*0.25;
+
+  // perna de apoio
+  var supL=Math.abs(thLF)<=Math.abs(thRF);
+
+  // ── Pernas ──
+  ctF.lineCap='round';
+  ctF.strokeStyle='#1D9E75';ctF.lineWidth=supL?5:2.5;
+  ctF.beginPath();ctF.moveTo(hipLx,hipLY);ctF.lineTo(hipLx,ankLY);ctF.stroke();
+  ctF.strokeStyle='#378ADD';ctF.lineWidth=supL?2.5:5;
+  ctF.beginPath();ctF.moveTo(hipRx,hipRY);ctF.lineTo(hipRx,ankRY);ctF.stroke();
+
+  // ── Pés inclinados ──
+  function drawFoot(ax,ay,thF,fill,stroke){
+    ctF.save();
+    ctF.translate(ax,ay);
+    ctF.rotate(-thF);
+    ctF.fillStyle=fill;ctF.strokeStyle=stroke;ctF.lineWidth=1;
+    ctF.beginPath();
+    if(ctF.roundRect)ctF.roundRect(-FW/2,-FH,FW,FH,2);
+    else ctF.rect(-FW/2,-FH,FW,FH);
+    ctF.fill();ctF.stroke();
+    ctF.restore();
+  }
+  drawFoot(hipLx,ankLY,thLF,
+    dk()?'rgba(29,158,117,0.9)':'rgba(15,110,86,0.8)',
+    dk()?'#5DCAA5':'#0F6E56');
+  drawFoot(hipRx,ankRY,thRF,
+    dk()?'rgba(55,138,221,0.9)':'rgba(24,95,165,0.8)',
+    dk()?'#85B7EB':'#185FA5');
+
+  // arcos θ_foot
+  function arcFoot(ax,ay,thF,col,label){
+    ctF.strokeStyle=col;ctF.lineWidth=1.2;
+    ctF.beginPath();ctF.arc(ax,ay,15,0,Math.abs(thF),false);ctF.stroke();
+    ctF.font='8px monospace';ctF.fillStyle=col;
+    ctF.fillText(label,ax+(thF>=0?17:-34),ay+16);
+  }
+  arcFoot(hipLx,ankLY,thLF,'#EF9F27',a[2].toFixed(0)+'°');
+  arcFoot(hipRx,ankRY,thRF,'#D85A30',a[3].toFixed(0)+'°');
+
+  // ── Corpo ──
+  ctF.fillStyle=dk()?'rgba(24,95,165,0.9)':'rgba(37,99,235,0.85)';
+  ctF.strokeStyle=dk()?'#85B7EB':'#185FA5';ctF.lineWidth=1;
+  ctF.beginPath();
+  if(ctF.roundRect)ctF.roundRect(bodyCX-bodyW/2,bodyCY-bodyH,bodyW,bodyH,5);
+  else ctF.rect(bodyCX-bodyW/2,bodyCY-bodyH,bodyW,bodyH);
+  ctF.fill();ctF.stroke();
+
+  // ── CoM ──
+  var comX=bodyCX, comY=bodyCY-bodyH/2;
+  ctF.strokeStyle='rgba(163,45,45,0.3)';ctF.lineWidth=1;ctF.setLineDash([2,3]);
+  ctF.beginPath();ctF.moveTo(comX,comY);ctF.lineTo(comX,gY);ctF.stroke();
+  ctF.setLineDash([]);
+  dot(ctF,comX,comY,5,'#A32D2D');
+  ctF.strokeStyle='rgba(255,255,255,0.75)';ctF.lineWidth=1.5;
+  ctF.beginPath();ctF.moveTo(comX-7,comY);ctF.lineTo(comX+7,comY);ctF.stroke();
+  ctF.beginPath();ctF.moveTo(comX,comY-7);ctF.lineTo(comX,comY+7);ctF.stroke();
+  ctF.font='8px monospace';ctF.fillStyle='#A32D2D';
+  ctF.fillText('CoM',comX+6,comY-2);
+
+  // articulações
+  [[hipLx,hipLY,'#1D9E75'],[hipRx,hipRY,'#378ADD'],
+   [hipLx,ankLY,'#5DCAA5'],[hipRx,ankRY,'#85B7EB']].forEach(function(p){
+    dot(ctF,p[0],p[1],3,p[2]);
+  });
+}
+
+// ── Trajetória Global ─────────────────────────────────────────────────────────
+// Vista de cima do caminho percorrido pelo robô no chão.
+// O robô é representado como seta indicando direção atual.
+function drawGlobal(){
+  ctG.clearRect(0,0,CW,CH);
+  grid(ctG);
+
+  var cx=CW/2, cy=CH/2;
+
+  // Eixos
+  ctG.strokeStyle=gc(0.15);ctG.lineWidth=1;
+  ctG.beginPath();ctG.moveTo(8,cy);ctG.lineTo(CW-8,cy);ctG.stroke();
+  ctG.beginPath();ctG.moveTo(cx,CH-8);ctG.lineTo(cx,8);ctG.stroke();
+  ctG.font='8px monospace';ctG.fillStyle=gc(0.35);
+  ctG.fillText('+X',CW-18,cy-3);
+  ctG.fillText('+Y',cx+3,11);
+  ctG.fillText('0',cx+3,cy-3);
+
+  if(globalTrail.length<2){
+    // ponto inicial
+    dot(ctG,cx,cy,4,'#A32D2D');
+    ctG.font='8px monospace';ctG.fillStyle=gc(0.3);
+    ctG.fillText('início',cx+6,cy-3);
+    return;
+  }
+
+  // Escala automática: cabe a trajetória na tela
+  var xs=globalTrail.map(function(p){return p.x;});
+  var ys=globalTrail.map(function(p){return p.y;});
+  var xmin=Math.min.apply(null,xs),xmax=Math.max.apply(null,xs);
+  var ymin=Math.min.apply(null,ys),ymax=Math.max.apply(null,ys);
+  var span=Math.max(xmax-xmin,ymax-ymin,20);
+  var sc=Math.min(80,CW*0.38)/span;
+
+  // trajetória
+  ctG.beginPath();ctG.strokeStyle=gc(0.18);ctG.lineWidth=1;
+  globalTrail.forEach(function(p,i){
+    var px=cx+p.x*sc, py=cy-p.y*sc;
+    if(i===0)ctG.moveTo(px,py);else ctG.lineTo(px,py);
+  });
+  ctG.stroke();
+
+  // gradiente de cor por idade
+  for(var i=1;i<globalTrail.length;i++){
+    var alpha=(i/globalTrail.length);
+    var p0=globalTrail[i-1], p1=globalTrail[i];
+    ctG.beginPath();
+    ctG.strokeStyle='rgba(163,45,45,'+alpha.toFixed(2)+')';
+    ctG.lineWidth=1.5;
+    ctG.moveTo(cx+p0.x*sc,cy-p0.y*sc);
+    ctG.lineTo(cx+p1.x*sc,cy-p1.y*sc);
+    ctG.stroke();
+  }
+
+  // ponto atual + seta de direção
+  var last=globalTrail[globalTrail.length-1];
+  var px=cx+last.x*sc, py=cy-last.y*sc;
+  var h=last.h||0;
+
+  // seta (corpo do robô)
+  var arrL=12;
+  ctG.save();
+  ctG.translate(px,py);
+  ctG.rotate(h);
+  ctG.fillStyle=dk()?'#185FA5':'#378ADD';
+  ctG.beginPath();
+  ctG.moveTo(0,-arrL);
+  ctG.lineTo(6,arrL*0.4);
+  ctG.lineTo(0,0);
+  ctG.lineTo(-6,arrL*0.4);
+  ctG.closePath();
+  ctG.fill();
+  ctG.restore();
+
+  // ponto de origem
+  dot(ctG,cx,cy,3,gc(0.3));
+  ctG.font='8px monospace';ctG.fillStyle=gc(0.3);
+  ctG.fillText('início',cx+4,cy-3);
+
+  // distância total
+  var dist=0;
+  for(var j=1;j<globalTrail.length;j++){
+    var dx=globalTrail[j].x-globalTrail[j-1].x;
+    var dy=globalTrail[j].y-globalTrail[j-1].y;
+    dist+=Math.sqrt(dx*dx+dy*dy);
+  }
+  ctG.font='8px monospace';ctG.fillStyle=gc(0.4);
+  ctG.fillText('dist: '+dist.toFixed(0)+' u',6,CH-8);
+  ctG.fillText('x:'+last.x.toFixed(0)+' y:'+last.y.toFixed(0),6,CH-18);
+}
+
+// ── Presets ───────────────────────────────────────────────────────────────────
+window.preset=function(name){
+  var p=PRESET[name];
+  S.A=p.A.slice();S.O=p.O.slice();S.ph=p.ph.slice();
+  [['aLL',0],['aRL',1],['aLF',2],['aRF',3]].forEach(function(r){
+    document.getElementById(r[0]).value=S.A[r[1]];
+    document.getElementById('v'+r[0]).textContent=S.A[r[1]]+'°';
+  });
+  [['oLL',0],['oRL',1],['oLF',2],['oRF',3]].forEach(function(r){
+    document.getElementById(r[0]).value=S.O[r[1]];
+    document.getElementById('v'+r[0]).textContent=S.O[r[1]]+'°';
+  });
+  globalX=0;globalY=0;globalHeading=0;globalTrail=[{x:0,y:0}];
+  document.querySelectorAll('.ow-btn').forEach(function(b){b.classList.remove('on');});
+  var map={wF:'pWF',wB:'pWB',tL:'pTL',tR:'pTR',sw:'pSW'};
+  if(map[name])document.getElementById(map[name]).classList.add('on');
+};
+
+window.togglePlay=function(){
+  playing=!playing;
+  var b=document.getElementById('btnP');
+  b.textContent=playing?'⏹ Parar':'▶ Animar';
+  b.classList.toggle('on',playing);
+  if(playing)lastTS=null;
+};
+
+window.resetSim=function(){
+  playing=false;simT=0;lastTS=null;
+  globalX=0;globalY=0;globalHeading=0;globalTrail=[{x:0,y:0}];
+  document.getElementById('btnP').textContent='▶ Animar';
+  document.getElementById('btnP').classList.remove('on');
+};
+
+// ── Loop ──────────────────────────────────────────────────────────────────────
+function loop(ts){
+  requestAnimationFrame(loop);
+  read();
+  var dt=0;
+  if(playing){
+    if(lastTS===null)lastTS=ts;
+    dt=Math.min(ts-lastTS,50);
+    lastTS=ts;
+    simT+=dt;
+  }
+  var a=ang(simT);
+  updateOdometry(a,dt);
+  document.getElementById('dLL').textContent=a[0].toFixed(1)+'°';
+  document.getElementById('dRL').textContent=a[1].toFixed(1)+'°';
+  document.getElementById('dLF').textContent=a[2].toFixed(1)+'°';
+  document.getElementById('dRF').textContent=a[3].toFixed(1)+'°';
+  drawTop(a);
+  drawFront(a);
+  drawGlobal();
+}
+requestAnimationFrame(loop);
+
+})();
+</script>

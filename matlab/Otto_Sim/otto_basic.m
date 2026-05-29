@@ -142,17 +142,26 @@ case "backward"
     drawBox(legLeftCenter,params.legW,params.legD,params.legL,RL,[0.1 0.7 0.3]);
     drawBox(legRightCenter,params.legW,params.legD,params.legL,RR,[0.2 0.5 1]);
 
-    % Pés alinhados para frente
-    ankleLeft = hipLeft + (RL * [0 0 -params.legL]')';
+    % Pés com apoio alternado
+ankleLeft = hipLeft + (RL * [0 0 -params.legL]')';
 ankleRight = hipRight + (RR * [0 0 -params.legL]')';
 
-RFLeft = RL * rotx(deg2rad(footL));
-RFRight = RR * rotx(deg2rad(footR));
+% Condição: qual pé apoia e qual levanta
+if phase > 0
+    % Pé esquerdo apoia (fixo), direito levanta
+    RFLeft = RL; 
+    RFRight = RR * rotx(deg2rad(footR));
+else
+    % Pé direito apoia (fixo), esquerdo levanta
+    RFLeft = RL * rotx(deg2rad(footL));
+    RFRight = RR;
+end
 
-% Corrigido: pés para frente
+% Centros dos pés (sempre para frente)
 footLeftCenter = ankleLeft + [0 -params.footD/2 0];
 footRightCenter = ankleRight + [0 -params.footD/2 0];
 
+% Desenho dos pés
 drawBox(footLeftCenter,params.footW,params.footD,params.footH,RFLeft,[1 0.6 0.1]);
 drawBox(footRightCenter,params.footW,params.footD,params.footH,RFRight,[1 0.35 0.15]);
 

@@ -12,7 +12,8 @@ chapters:
     title: Robô Otto Ninja
   - file: notebooks/teoria/Aula1_OttoMatlab.ipynb
     title: Otto, MATLAB e Simulink
-  
+  - file: notebooks/teoria/Aula_OttoFusionROSGazeboMatlab.ipynb
+    title: Otto, ROS, Gazebo e MATLAB
 
 - file: notebooks/pratica/index.md
   title: Atividade Prática

@@ -9,6 +9,7 @@ parse:
   myst_enable_extensions:
     - colon_fence   # diretivas {figure}, {note}, {admonition} etc.
     - dollarmath    # equações $...$ e $$...$$
+    - footnote       # notas de rodapé
 
 # ── Execução ──────────────────────────────────────────────────────────────────
 execute:

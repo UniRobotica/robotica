@@ -9,14 +9,14 @@ chapters:
   - file: notebooks/teoria/Fundamentos.ipynb
     title: Fundamentos de Robótica
   
-- file: notebooks/teoria/index.md
+- file: notebooks/otto/index.md
   title: Robô Otto - Aprender fazendo
   sections:
-  - file: notebooks/teoria/OttoNinja.ipynb
+  - file: notebooks/otto/OttoNinja.ipynb
     title: Robô Otto Ninja
-  - file: notebooks/teoria/Aula1_OttoMatlab.ipynb
+  - file: notebooks/otto/Aula1_OttoMatlab.ipynb
     title: Otto, MATLAB e Simulink
-  - file: notebooks/teoria/Aula_OttoFusionROSGazeboMatlab.ipynb
+  - file: notebooks/otto/Aula_OttoFusionROSGazeboMatlab.ipynb
     title: Otto, ROS, Gazebo e MATLAB
 
 - file: notebooks/pratica/index.md

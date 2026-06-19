@@ -4,10 +4,14 @@ root: intro
 chapters:
 
 - file: notebooks/teoria/index.md
-  title: Teoria
+  title: Fundamentos de Robótica
   sections:
   - file: notebooks/teoria/Fundamentos.ipynb
     title: Fundamentos de Robótica
+  
+- file: notebooks/teoria/index.md
+  title: Robô Otto - Aprender fazendo
+  sections:
   - file: notebooks/teoria/OttoNinja.ipynb
     title: Robô Otto Ninja
   - file: notebooks/teoria/Aula1_OttoMatlab.ipynb

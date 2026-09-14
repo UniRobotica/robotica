@@ -18,6 +18,8 @@ chapters:
     title: Otto, MATLAB e Simulink
   - file: notebooks/otto/Aula_OttoFusionROSGazeboMatlab.ipynb
     title: Otto, ROS, Gazebo e MATLAB
+  - file: notebooks/otto/Tutorial_Otto_Starter_BLE.md
+    title: Otto, ROS, Gazebo e MATLAB - Parte 2
 
 - file: notebooks/pratica/index.md
   title: Atividade Prática

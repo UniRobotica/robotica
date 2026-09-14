@@ -1,4 +1,4 @@
-# Tutorial Otto Starter com Arduino Nano, HM-10 BLE e Otto Web App
+# Tutorial de montagem Otto Starter com Arduino Nano, HM-10 BLE e Otto Web App
 
 ## 1. Objetivo
 

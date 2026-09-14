@@ -19,7 +19,7 @@ chapters:
   - file: notebooks/otto/Aula_OttoFusionROSGazeboMatlab.ipynb
     title: Otto, ROS, Gazebo e MATLAB
   - file: notebooks/otto/Tutorial_Otto_Starter_BLE.md
-    title: Otto, ROS, Gazebo e MATLAB - Parte 2
+    title: Tutorial de montagem Otto Starter com Arduino Nano, HM-10 BLE e Otto Web App
 
 - file: notebooks/pratica/index.md
   title: Atividade Prática

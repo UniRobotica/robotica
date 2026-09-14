@@ -12,14 +12,15 @@ chapters:
 - file: notebooks/otto/index.md
   title: Robô Otto - Aprender fazendo
   sections:
+  - file: notebooks/otto/Tutorial_Otto_Starter_BLE.md
+    title: Tutorial de montagem Otto Starter com Arduino Nano, HM-10 BLE e Otto Web App
   - file: notebooks/otto/OttoNinja.ipynb
     title: Robô Otto Ninja
   - file: notebooks/otto/Aula1_OttoMatlab.ipynb
     title: Otto, MATLAB e Simulink
   - file: notebooks/otto/Aula_OttoFusionROSGazeboMatlab.ipynb
     title: Otto, ROS, Gazebo e MATLAB
-  - file: notebooks/otto/Tutorial_Otto_Starter_BLE.md
-    title: Tutorial de montagem Otto Starter com Arduino Nano, HM-10 BLE e Otto Web App
+  
 
 - file: notebooks/pratica/index.md
   title: Atividade Prática
